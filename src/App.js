@@ -1,11 +1,11 @@
 import './App.css';
-import MiniDrawer from './components/DrawerComponent';
+import DashBoard from './components/DashBoard';
 
 function App() {
   return (
     <div className="App">
       
-      <MiniDrawer/>
+      <DashBoard/>
       
     </div>
   );
