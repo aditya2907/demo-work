@@ -71,3 +71,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 ### install Material UI
 npm install @mui/material @mui/icons-material @emotion/react @emotion/styled
+npm install @mui/x-tree-view
+npm install @mui/styles
+npm i @mui/material

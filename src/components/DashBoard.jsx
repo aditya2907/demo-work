@@ -8,11 +8,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
 import SideList from './SideList';
-import { createTheme } from '@mui/material';
+import { Badge, createTheme, Menu, MenuItem } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import {Brightness7, Brightness4 } from '@mui/icons-material';
+import { Brightness7, Brightness4, More, AccountCircle, Mail, Notifications } from '@mui/icons-material';
+import AdbIcon from '@mui/icons-material/Adb';
+import MoreIcon from '@mui/icons-material/MoreVert';
+import AppFooter from './AppFooter';
 
 const drawerWidth = 240;
+const pages = ['Products', 'Pricing', 'Blog'];
 
 const AppBar = styled(MuiAppBar, {
 	shouldForwardProp: (prop) => prop !== 'open',
@@ -39,7 +43,7 @@ const AppBar = styled(MuiAppBar, {
 
 export default function DashBoard() {
 	const [open, setOpen] = useState(false);
-	const [dark, setDark] = useState(false);
+	const [dark, setDark] = useState(true);
 
 	const darkTheme = useMemo(() => createTheme({
 		palette: {
@@ -67,18 +71,76 @@ export default function DashBoard() {
 						>
 							<MenuIcon />
 						</IconButton>
-						<Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+						<Typography
+							variant="h6"
+							noWrap
+							component="a"
+							sx={{
+								mr: 2,
+								display: { xs: 'none', md: 'flex' },
+								fontFamily: 'monospace',
+								fontWeight: 700,
+								letterSpacing: '.3rem',
+								color: 'inherit',
+								textDecoration: 'none',
+							}}
+						>
 							RDV
 						</Typography>
-						<IconButton
-							onClick={() => setDark(!dark)}
-							edge="end"
-						>
-							{dark ? <Brightness7/>: <Brightness4/>}
-						</IconButton>
+						<Box sx={{ flexGrow: 1 }} />
+						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+							<IconButton
+								onClick={() => setDark(!dark)}
+								color="inherit"
+								size="large"
+							>
+								{dark ? <Brightness7 /> : <Brightness4 />}
+							</IconButton>
+						</Box>
+						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+							<IconButton size="large" aria-label="show 4 new mails" color="inherit">
+								<Badge badgeContent={4} color="error">
+									<Mail />
+								</Badge>
+							</IconButton>
+							<IconButton
+								size="large"
+								aria-label="show 17 new notifications"
+								color="inherit"
+							>
+								<Badge badgeContent={17} color="error">
+									<Notifications />
+								</Badge>
+							</IconButton>
+							<IconButton
+								size="large"
+								edge="end"
+								aria-label="account of current user"
+								// aria-controls={menuId}
+								aria-haspopup="true"
+								// onClick={handleProfileMenuOpen}
+								color="inherit"
+							>
+								<AccountCircle />
+							</IconButton>
+						</Box>
+						<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
+							<IconButton
+								size="large"
+								aria-label="show more"
+								// aria-controls={mobileMenuId}
+								aria-haspopup="true"
+								// onClick={handleMobileMenuOpen}
+								color="inherit"
+							>
+								<MoreIcon />
+							</IconButton>
+						</Box>
+
 					</Toolbar>
 				</AppBar>
 				<SideList {...{ open, setOpen }} />
+				<AppFooter/>
 			</Box >
 		</ThemeProvider>
 	);
