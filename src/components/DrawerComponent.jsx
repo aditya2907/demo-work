@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
 import MuiDrawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
@@ -13,8 +11,9 @@ import ListItemText from '@mui/material/ListItemText';
 import ChevronLeft from '@mui/icons-material/ChevronLeft';
 import StoreIcon from '@mui/icons-material/Store';
 import CreditScoreIcon from '@mui/icons-material/CreditScore';
-import LabelIcon from '@mui/icons-material/Label';
 import { Link } from 'react-router-dom';
+import { Label as LabelIcon } from '@mui/icons-material';
+
 
 const drawerWidth = 240;
 
@@ -48,7 +47,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 	...theme.mixins.toolbar,
 }));
 
-const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' })(
+const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'openDrawer' })(
 	({ theme }) => ({
 		width: drawerWidth,
 		flexShrink: 0,
@@ -56,14 +55,14 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 		boxSizing: 'border-box',
 		variants: [
 			{
-				props: ({ open }) => open,
+				props: ({ openDrawer }) => openDrawer,
 				style: {
 					...openedMixin(theme),
 					'& .MuiDrawer-paper': openedMixin(theme),
 				},
 			},
 			{
-				props: ({ open }) => !open,
+				props: ({ openDrawer }) => !openDrawer,
 				style: {
 					...closedMixin(theme),
 					'& .MuiDrawer-paper': closedMixin(theme),
@@ -74,26 +73,26 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 
-export default function SideBar({ open, setOpen }) {
+export default function DrawerComponent({ openDrawer, setDrawerOpen }) {
 	return (
 		<>
-			<Drawer variant="permanent" open={open}>
+			<Drawer variant="permanent" openDrawer={openDrawer}>
 				<DrawerHeader>
-					<IconButton onClick={() => setOpen(false)}>
+					<IconButton onClick={() => setDrawerOpen(false)}>
 						<ChevronLeft />
 					</IconButton>
 				</DrawerHeader>
 				<Divider />
 				<List>
-					{['Home', 'About', 'Contact', 'Drafts'].map((text) => (
-						<ListItem key={text} disablePadding sx={{ display: 'block' }} component={Link} to={`/${text}`} >
+					{['home', 'about', 'contact', 'Drafts'].map((text) => (
+						<ListItem key={text} disablePadding sx={{ display: 'block' }} component={Link} to={ openDrawer? `${text}` : `#`} >
 							<ListItemButton							
 								sx={[
 									{
 										minHeight: 48,
 										px: 2.5,
 									},
-									open
+									openDrawer
 										? {
 											justifyContent: 'initial',
 										}
@@ -108,7 +107,7 @@ export default function SideBar({ open, setOpen }) {
 											minWidth: 0,
 											justifyContent: 'center',
 										},
-										open
+										openDrawer
 											? {
 												mr: 3,
 											}
@@ -122,7 +121,7 @@ export default function SideBar({ open, setOpen }) {
 								<ListItemText
 									primary={text}
 									sx={[
-										open
+										openDrawer
 											? {
 												opacity: 1,
 											}
@@ -135,6 +134,7 @@ export default function SideBar({ open, setOpen }) {
 						</ListItem>
 					))}
 				</List>
+
 				<Divider />
 				<List>
 					{['All mail', 'Trash', 'Spam'].map((text, index) => (
@@ -146,7 +146,7 @@ export default function SideBar({ open, setOpen }) {
 										minHeight: 48,
 										px: 2.5,
 									},
-									open
+									openDrawer
 										? {
 											justifyContent: 'initial',
 										}
@@ -161,7 +161,7 @@ export default function SideBar({ open, setOpen }) {
 											minWidth: 0,
 											justifyContent: 'center',
 										},
-										open
+										openDrawer
 											? {
 												mr: 3,
 											}
@@ -175,7 +175,7 @@ export default function SideBar({ open, setOpen }) {
 								<ListItemText
 									primary={text}
 									sx={[
-										open
+										openDrawer
 											? {
 												opacity: 1,
 											}
@@ -189,7 +189,7 @@ export default function SideBar({ open, setOpen }) {
 					))}
 				</List>
 			</Drawer>
-			
+
 		</>
 	)
 }

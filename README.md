@@ -76,3 +76,5 @@ npm install @mui/styles
 npm i @mui/material
 npm install react-router-dom --save
 npm install express mssql
+npm i ag-grid-community
+npm install ag-grid-react

@@ -7,48 +7,26 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import SideBar from './SideBar';
-import { Badge, createTheme, Paper, Tab, Tabs } from '@mui/material';
+import { Badge, createTheme } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
 import { Brightness7, Brightness4, AccountCircle, Mail, Notifications } from '@mui/icons-material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AppFooter from './AppFooter';
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import MainContent from './MainContent';
-import Report from './Report';
-import { Outlet } from 'react-router-dom';
+import homeTableData from '../data/home'
+import aboutTableData from '../data/about'
+import contactTableData from '../data/contact'
+import DrawerComponent from './DrawerComponent';
+import AppBarComponent from './AppBarComponent';
 
 const drawerWidth = 240;
-const pages = ['Products', 'Pricing', 'Blog'];
 
-const AppBar = styled(MuiAppBar, {
-	shouldForwardProp: (prop) => prop !== 'open',
-})(({ theme }) => ({
-	zIndex: theme.zIndex.drawer + 1,
-	transition: theme.transitions.create(['width', 'margin'], {
-		easing: theme.transitions.easing.sharp,
-		duration: theme.transitions.duration.leavingScreen,
-	}),
-	variants: [
-		{
-			props: ({ open }) => open,
-			style: {
-				marginLeft: drawerWidth,
-				width: `calc(100% - ${drawerWidth}px)`,
-				transition: theme.transitions.create(['width', 'margin'], {
-					easing: theme.transitions.easing.sharp,
-					duration: theme.transitions.duration.enteringScreen,
-				}),
-			},
-		},
-	],
-}));
 
 export default function DashBoard() {
-	const [open, setOpen] = useState(true);
-	const [dark, setDark] = useState(true);
-	const text='';
-	const title = text;
-	
+	const [openDrawer, setDrawerOpen] = useState(false);
+	const [dark, setThemeDark] = useState(true);
+
 	const darkTheme = useMemo(() => createTheme({
 		palette: {
 			mode: dark ? 'dark' : 'light'
@@ -56,103 +34,56 @@ export default function DashBoard() {
 	}), [dark])
 
 	return (
-		<ThemeProvider theme={darkTheme}>
-			<Box sx={{ display: 'flex', flexGrow: 1 }} >
-				<CssBaseline />
-				<AppBar position="fixed" open={open} >
-					<Toolbar >
-						<IconButton
-							color="inherit"
-							aria-label="open drawer"
-							onClick={() => setOpen(true)}
-							edge="start"
-							sx={[
-								{
-									marginRight: 5,
-								},
-								open && { display: 'none' },
-							]}
-						>
-							<MenuIcon />
-						</IconButton>
-						<Typography
-							variant="h6"
-							noWrap
-							component="a"
-							sx={{
-								mr: 2,
-								display: { xs: 'none', md: 'flex' },
-								fontFamily: 'monospace',
-								fontWeight: 700,
-								letterSpacing: '.3rem',
-								color: 'inherit',
-								textDecoration: 'none',
-							}}
-						>
-							RDV
-						</Typography>
-						<Box sx={{ flexGrow: 1 }} />
-						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-							<IconButton
-								onClick={() => setDark(!dark)}
-								color="inherit"
-								size="large"
-							>
-								{dark ? <Brightness7 /> : <Brightness4 />}
-							</IconButton>
-						</Box>
-						<Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-							<IconButton size="large" aria-label="show 4 new mails" color="inherit">
-								<Badge badgeContent={4} color="error">
-									<Mail />
-								</Badge>
-							</IconButton>
-							<IconButton
-								size="large"
-								aria-label="show 17 new notifications"
-								color="inherit"
-							>
-								<Badge badgeContent={17} color="error">
-									<Notifications />
-								</Badge>
-							</IconButton>
-							<IconButton
-								size="large"
-								edge="end"
-								aria-label="account of current user"
-								// aria-controls={menuId}
-								aria-haspopup="true"
-								// onClick={handleProfileMenuOpen}
-								color="inherit"
-							>
-								<AccountCircle />
-							</IconButton>
-						</Box>
-						<Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-							<IconButton
-								size="large"
-								aria-label="show more"
-								// aria-controls={mobileMenuId}
-								aria-haspopup="true"
-								// onClick={handleMobileMenuOpen}
-								color="inherit"
-							>
-								<MoreIcon />
-							</IconButton>
-						</Box>
-					</Toolbar>
-				</AppBar>
-				<SideBar {...{ open, setOpen, text }} />
-				<Box sx={{ flexGrow: 1, p: 3 }}>
-					<Outlet /> {/* Renders the matched child route */}
+		<Router>
+			<ThemeProvider theme={darkTheme}>
+				<Box sx={{ display: 'flex' }}>
+					<CssBaseline />
+					
+					<AppBarComponent position='fixed' {...{openDrawer, dark, setDrawerOpen, setThemeDark}} />
+
+					<DrawerComponent {...{ openDrawer, setDrawerOpen }} />
+
+					{/* <MainContent
+						key={homeTableData.id}
+						title={homeTableData.title}
+						columnDefs={homeTableData.columnDefs}
+						rowData={homeTableData.rowData}
+					/> */}
+
+					<Box sx={{
+						flexGrow: 1,
+						width: openDrawer ? drawerWidth : 0,
+						transition: 'margin 0.3s'
+					}}>
+						<Routes>
+							<Route path='/home' element={<MainContent
+								key={homeTableData.id}
+								title={homeTableData.title}
+								columnDefs={homeTableData.columnDefs}
+								rowData={homeTableData.rowData}
+							/>} />
+							<Route path='/about' element={<MainContent
+								key={aboutTableData.id}
+								title={aboutTableData.title}
+								columnDefs={aboutTableData.columnDefs}
+								rowData={aboutTableData.rowData}
+							/>} />
+							<Route path='/contact' element={<MainContent
+								key={contactTableData.id}
+								title={contactTableData.title}
+								columnDefs={contactTableData.columnDefs}
+								rowData={contactTableData.rowData}
+							/>} />
+
+							{/* <Route path="/home" element={<MainContent tableData={homeTableData} />} />
+							<Route path="/about" element={<MainContent tableData={aboutTableData} />} />
+							<Route path="/contact" element={<MainContent tableData={contactTableData} />} /> */}
+						</Routes>
+						<AppFooter />
+					</Box>
+
 				</Box>
-				
-				<MainContent {...{ title }} />
-
-				{/* <Report/> */}
-
-				<AppFooter />
-			</Box >
-		</ThemeProvider>
+			</ThemeProvider>
+		</Router>
 	);
 }
