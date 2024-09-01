@@ -7,13 +7,15 @@ import CssBaseline from '@mui/material/CssBaseline';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
-import SideList from './SideList';
-import { Badge, createTheme, Menu, MenuItem } from '@mui/material';
+import SideBar from './SideBar';
+import { Badge, createTheme, Paper, Tab, Tabs } from '@mui/material';
 import { ThemeProvider } from '@emotion/react';
-import { Brightness7, Brightness4, More, AccountCircle, Mail, Notifications } from '@mui/icons-material';
-import AdbIcon from '@mui/icons-material/Adb';
+import { Brightness7, Brightness4, AccountCircle, Mail, Notifications } from '@mui/icons-material';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import AppFooter from './AppFooter';
+import MainContent from './MainContent';
+import Report from './Report';
+import { Outlet } from 'react-router-dom';
 
 const drawerWidth = 240;
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -42,8 +44,9 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 export default function DashBoard() {
-	const [open, setOpen] = useState(false);
+	const [open, setOpen] = useState(true);
 	const [dark, setDark] = useState(true);
+
 
 	const darkTheme = useMemo(() => createTheme({
 		palette: {
@@ -136,11 +139,17 @@ export default function DashBoard() {
 								<MoreIcon />
 							</IconButton>
 						</Box>
-
 					</Toolbar>
 				</AppBar>
-				<SideList {...{ open, setOpen }} />
-				<AppFooter/>
+				<SideBar {...{ open, setOpen }} />
+				<Box sx={{ flexGrow: 1, p: 3 }}>
+					<Outlet /> {/* Renders the matched child route */}
+				</Box>
+				{/* <MainContent /> */}
+
+				{/* <Report/> */}
+
+				<AppFooter />
 			</Box >
 		</ThemeProvider>
 	);
