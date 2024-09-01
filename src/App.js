@@ -5,18 +5,27 @@ import Home from './components/Home';
 import About from './components/About';
 import Contact from './components/Contact';
 
-function App() {
-	return (
-		<Router>
-			<Routes>
-				<Route path="/" element={<DashBoard />}>
-				<Route index element={<Home />} />
-				<Route path="About" element={<About />} />
-				<Route path="Contact" element={<Contact />} />
-				</Route>
-			</Routes>
-		</Router>
-	);
-}
+import { CssBaseline, Box } from '@mui/material';
+
+const App = () => {
+  return (
+    <Router>
+      <Box sx={{ display: 'flex' }}>
+        <CssBaseline />
+        <DashBoard />
+        <Box
+          component="main"
+          sx={{ flexGrow: 1, p: 3, marginLeft: { xs: 0, sm: 240 } }}
+        >
+          <Routes>
+            <Route path="/About" component={<About/>} />
+            <Route path="/Contact" component={<Contact/>} />
+            <Route path="/" component={<Home/>} />
+          </Routes>
+        </Box>
+      </Box>
+    </Router>
+  );
+};
 
 export default App;

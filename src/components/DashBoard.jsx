@@ -46,8 +46,9 @@ const AppBar = styled(MuiAppBar, {
 export default function DashBoard() {
 	const [open, setOpen] = useState(true);
 	const [dark, setDark] = useState(true);
-
-
+	const text='';
+	const title = text;
+	
 	const darkTheme = useMemo(() => createTheme({
 		palette: {
 			mode: dark ? 'dark' : 'light'
@@ -141,11 +142,12 @@ export default function DashBoard() {
 						</Box>
 					</Toolbar>
 				</AppBar>
-				<SideBar {...{ open, setOpen }} />
+				<SideBar {...{ open, setOpen, text }} />
 				<Box sx={{ flexGrow: 1, p: 3 }}>
 					<Outlet /> {/* Renders the matched child route */}
 				</Box>
-				{/* <MainContent /> */}
+				
+				<MainContent {...{ title }} />
 
 				{/* <Report/> */}
 
